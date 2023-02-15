@@ -1,10 +1,13 @@
 package me.springprojects.smbackend.services.verifications;
 
 import lombok.AllArgsConstructor;
+import me.springprojects.smbackend.entities.User;
 import me.springprojects.smbackend.entities.dto.UserDTO;
 import me.springprojects.smbackend.exceptions.InvalidUserArgumentException;
 import me.springprojects.smbackend.repositories.UserRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -25,6 +28,20 @@ public class UserServiceVerification {
         else if(lastnameValidated!=null) throw new InvalidUserArgumentException(lastnameValidated);
         else if(emailValidated!=null) throw new InvalidUserArgumentException(emailValidated);
         else if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
+    }
+
+    public void changeEmailVerification(String email){
+        String emailValidated = validateUserEmail(email);
+        if(emailValidated!=null) throw new InvalidUserArgumentException(emailValidated);
+    }
+
+    public void changePasswordVerification(String password){
+        String passwordValidated = validateUserPassword(password);
+        if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
+    }
+
+    public void verificateUserExistence(Optional<User> userOptional){
+        if(userOptional.isEmpty()) throw new InvalidUserArgumentException("User does not exist.");
     }
 
     private String validateUserName(String name){
