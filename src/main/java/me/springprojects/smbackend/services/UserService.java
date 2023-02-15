@@ -40,8 +40,6 @@ public class UserService {
         user.setLastname(userDTO.getLastname());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
-        user.setGroupsCreated(new ArrayList<>());
-        user.setGroupsJoined(new ArrayList<>());
         user.setPostsCreated(new ArrayList<>());
         userRepository.save(user);
     }

@@ -5,6 +5,8 @@ import me.springprojects.smbackend.entities.dto.PostDTO;
 import me.springprojects.smbackend.services.PostService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/post")
@@ -15,5 +17,10 @@ public class PostController {
     @PostMapping(path = "/add")
     public void addPost(@RequestBody PostDTO postDTO, @RequestParam(name = "id") int userId){
         postService.addPost(postDTO, userId);
+    }
+
+    @GetMapping(path = "/all")
+    public List<PostDTO> fetchAllPosts(){
+        return postService.fetchAllPosts();
     }
 }

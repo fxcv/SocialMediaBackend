@@ -19,14 +19,6 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "groupCreator", fetch = FetchType.LAZY)
-    private List<Group> groupsCreated;
-
-    @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user"),
-                                    inverseJoinColumns = @JoinColumn(name = "group"))
-    @ManyToMany
-    private List<Group> groupsJoined;
-
     @OneToMany(mappedBy = "postCreator", fetch = FetchType.LAZY)
     private List<Post> postsCreated;
 }
