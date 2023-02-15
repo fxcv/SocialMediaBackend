@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class PostDTO {
 
+    private String postCreatorName;
     private String postDate;
     private String postText;
 }

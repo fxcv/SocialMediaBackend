@@ -1,17 +1,14 @@
 package me.springprojects.smbackend.services.verifications;
 
 import lombok.AllArgsConstructor;
-import me.springprojects.smbackend.entities.User;
 import me.springprojects.smbackend.entities.dto.UserDTO;
 import me.springprojects.smbackend.exceptions.InvalidUserArgumentException;
 import me.springprojects.smbackend.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @AllArgsConstructor
-public class UserServiceVerification {
+public class UserServiceVerification extends Verification{
 
     private final UserRepository userRepository;
 
@@ -38,10 +35,6 @@ public class UserServiceVerification {
     public void changePasswordVerification(String password){
         String passwordValidated = validateUserPassword(password);
         if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
-    }
-
-    public void verificateUserExistence(Optional<User> userOptional){
-        if(userOptional.isEmpty()) throw new InvalidUserArgumentException("User does not exist.");
     }
 
     private String validateUserName(String name){
