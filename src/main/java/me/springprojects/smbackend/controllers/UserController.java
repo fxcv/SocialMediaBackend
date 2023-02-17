@@ -25,12 +25,12 @@ public class UserController {
     }
 
     @PutMapping(path = "/update/email")
-    public void updateUserEmail(@RequestParam(name = "id") int userId, @RequestParam(name = "email") String email){
-        userService.updateUserEmail(userId, email);
+    public void updateUserEmail(@RequestParam(name = "email") String email){
+        userService.updateUserEmail(email);
     }
 
     @PutMapping(path = "/update/password")
-    public void updateUserPassword(@RequestParam(name = "id") int userId, @RequestParam(name = "pass") String password){
-        userService.updateUserPassword(userId, password);
+    public void updateUserPassword(@RequestParam(name = "pass") String password){
+        userService.updateUserPassword(password);
     }
 }

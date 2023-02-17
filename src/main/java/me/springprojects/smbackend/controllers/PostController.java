@@ -15,8 +15,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping(path = "/add")
-    public void addPost(@RequestBody PostDTO postDTO, @RequestParam(name = "id") int userId){
-        postService.addPost(postDTO, userId);
+    public void addPost(@RequestBody PostDTO postDTO){
+        postService.addPost(postDTO);
     }
 
     @GetMapping(path = "/all")

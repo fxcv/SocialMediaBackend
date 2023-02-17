@@ -7,11 +7,11 @@ import me.springprojects.smbackend.entities.dto.PostDTO;
 import me.springprojects.smbackend.repositories.PostRepository;
 import me.springprojects.smbackend.repositories.UserRepository;
 import me.springprojects.smbackend.services.verifications.PostServiceVerification;
+import me.springprojects.smbackend.utility.UserUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +21,12 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostServiceVerification postServiceVerification;
+    private final UserUtil userUtil;
 
-    public void addPost(PostDTO postDTO, int userId){
-        Optional<User> userOptional = userRepository.findById(userId);
-        postServiceVerification.addPostVerification(postDTO, userOptional);
+    public void addPost(PostDTO postDTO){
+        postServiceVerification.addPostVerification(postDTO);
         Post post = new Post();
-        User user = userOptional.get();
+        User user = userUtil.getUser();
         post.setPostText(postDTO.getPostText());
         post.setPostDate(LocalDateTime.now());
         post.setPostCreator(user);
@@ -39,7 +39,7 @@ public class PostService {
         return postRepository.findAll().stream()
                                        .map(post -> {
                                            PostDTO postDTO = new PostDTO();
-                                           postDTO.setPostCreatorName(post.getPostCreator().getName());
+                                           postDTO.setPostCreatorName(post.getPostCreator().getUsername());
                                            postDTO.setPostDate(post.getPostDate().toString());
                                            postDTO.setPostText(post.getPostText());
                                            return postDTO;

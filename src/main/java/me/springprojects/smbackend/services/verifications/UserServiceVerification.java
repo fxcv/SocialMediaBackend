@@ -1,28 +1,28 @@
 package me.springprojects.smbackend.services.verifications;
 
 import lombok.AllArgsConstructor;
+import me.springprojects.smbackend.entities.User;
 import me.springprojects.smbackend.entities.dto.UserDTO;
 import me.springprojects.smbackend.exceptions.InvalidUserArgumentException;
 import me.springprojects.smbackend.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @AllArgsConstructor
-public class UserServiceVerification extends Verification{
+public class UserServiceVerification {
 
     private final UserRepository userRepository;
 
     public void registerUserVerification(UserDTO userDTO){
-        String name = userDTO.getName();
-        String lastname = userDTO.getLastname();
+        String name = userDTO.getUsername();
         String email = userDTO.getEmail();
         String password = userDTO.getPassword();
-        String nameValidated = validateUserName(name);
-        String lastnameValidated = validateUserLastname(lastname);
+        String nameValidated = validateUsername(name);
         String emailValidated = validateUserEmail(email);
         String passwordValidated = validateUserPassword(password);
         if(nameValidated!=null) throw new InvalidUserArgumentException(nameValidated);
-        else if(lastnameValidated!=null) throw new InvalidUserArgumentException(lastnameValidated);
         else if(emailValidated!=null) throw new InvalidUserArgumentException(emailValidated);
         else if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
     }
@@ -37,27 +37,12 @@ public class UserServiceVerification extends Verification{
         if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
     }
 
-    private String validateUserName(String name){
-        if(name==null) return "Please provide a name.";
-        if(name.length()<3) return "Please provide a correct name.";
+    private String validateUsername(String name){
+        if(name==null) return "Please provide a username.";
+        if(name.length()<4) return "Please provide username with the minimum length of 4";
 
         for(char c : name.toCharArray()){
-            if(!Character.isLetter(c)) return "Only letters in name.";
-            else if(!name.startsWith(c + "") && c == Character.toUpperCase(c)) return "Name should not contain uppercase characters except first character";
-            else if(name.startsWith(c + "") && c == Character.toLowerCase(c)) return "Name should start with a capital letter";
-        }
-
-        return null;
-    }
-
-    private String validateUserLastname(String lastname){
-        if(lastname==null) return "Please provide a lastname.";
-        if(lastname.length()<3) return "Please provide a correct lastname.";
-
-        for(char c : lastname.toCharArray()){
-            if(!Character.isLetter(c)) return "Lastname should contain only letters.";
-            else if(!lastname.startsWith(c + "") && c == Character.toUpperCase(c)) return "Lastname should not contain uppercase characters except first character";
-            else if(lastname.startsWith(c + "") && c == Character.toLowerCase(c)) return "Lastname should start with a capital letter";
+            if(!Character.isLetterOrDigit(c)) return "Username can not contain special characters.";
         }
 
         return null;
