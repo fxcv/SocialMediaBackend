@@ -23,6 +23,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(); //only for development process
+        return new BCryptPasswordEncoder();
     }
 }

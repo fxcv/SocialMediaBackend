@@ -19,10 +19,10 @@ public class UserServiceVerification {
         String name = userDTO.getUsername();
         String email = userDTO.getEmail();
         String password = userDTO.getPassword();
-        String nameValidated = validateUsername(name);
+        String usernameValidated = validateUsername(name);
         String emailValidated = validateUserEmail(email);
         String passwordValidated = validateUserPassword(password);
-        if(nameValidated!=null) throw new InvalidUserArgumentException(nameValidated);
+        if(usernameValidated!=null) throw new InvalidUserArgumentException(usernameValidated);
         else if(emailValidated!=null) throw new InvalidUserArgumentException(emailValidated);
         else if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
     }
@@ -39,6 +39,8 @@ public class UserServiceVerification {
 
     private String validateUsername(String name){
         if(name==null) return "Please provide a username.";
+        boolean isExists = userRepository.checkIfUserExists(name);
+        if(isExists) return "This user is already registered";
         if(name.length()<4) return "Please provide username with the minimum length of 4";
 
         for(char c : name.toCharArray()){
