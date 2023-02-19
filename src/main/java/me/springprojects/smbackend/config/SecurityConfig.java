@@ -14,9 +14,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.httpBasic()
                 .and().authorizeHttpRequests()
-                .requestMatchers( "/user/**", "/post/**").hasAnyAuthority("USER", "ADMIN")
-                .requestMatchers("/user/all", "/post/all").hasAuthority("ADMIN")
-                .requestMatchers("/user/add").permitAll()
+                .requestMatchers("/user/all", "/post/all", "/user/add").hasRole("ADMIN")
+                .requestMatchers( "/user/**", "/post/**").hasAnyRole("USER", "ADMIN")
                 .and().csrf().disable() //only for development process
                 .build();
     }

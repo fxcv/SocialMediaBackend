@@ -6,6 +6,7 @@ import me.springprojects.smbackend.entities.dto.UserDTO;
 import me.springprojects.smbackend.exceptions.InvalidUserArgumentException;
 import me.springprojects.smbackend.repositories.SecurityAuthorityRepository;
 import me.springprojects.smbackend.repositories.UserRepository;
+import me.springprojects.smbackend.utility.UserUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,8 @@ class UserServiceTest {
     private UserRepository userRepository;
     @MockBean
     private SecurityAuthorityRepository securityAuthorityRepository;
+    @MockBean
+    private UserUtil userUtil;
 
     @Test
     public void checkIfRegistersAnUser(){
@@ -119,6 +122,28 @@ class UserServiceTest {
         assertEquals(user2.getEmail(), userDTO2.getEmail());
         assertEquals(user1.getPassword(), userDTO1.getPassword());
         assertEquals(user2.getPassword(), userDTO2.getPassword());
+    }
+
+    @Test
+    public void checkIfUpdatesAnEmail(){
+        String email = "updatedEmail@gmail.com";
+        User user = new User();
+        given(userUtil.getUser()).willReturn(user);
+
+        userService.updateUserEmail(email);
+
+        assertEquals(email, user.getEmail());
+    }
+
+    @Test
+    public void checkIfUpdatesThePassword(){
+        String password = "updatedPassword@2";
+        User user = new User();
+        given(userUtil.getUser()).willReturn(user);
+
+        userService.updateUserPassword(password);
+
+        assertEquals(password, user.getPassword());
     }
 
 }

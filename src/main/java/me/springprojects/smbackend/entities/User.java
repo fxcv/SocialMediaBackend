@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,12 @@ public class User {
     private String username;
     private String email;
     private String password;
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
+    private boolean locked;
+    @Column(name = "credentials_expired")
+    private boolean credentialsExpired;
+    private boolean enabled;
 
     @OneToMany(mappedBy = "postCreator", fetch = FetchType.LAZY)
     private List<Post> postsCreated;

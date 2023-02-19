@@ -3,13 +3,17 @@ package me.springprojects.smbackend.services;
 import me.springprojects.smbackend.entities.Post;
 import me.springprojects.smbackend.entities.User;
 import me.springprojects.smbackend.entities.dto.PostDTO;
+import me.springprojects.smbackend.exceptions.InvalidPostArgumentException;
 import me.springprojects.smbackend.repositories.PostRepository;
+import me.springprojects.smbackend.repositories.UserRepository;
+import me.springprojects.smbackend.utility.UserUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +27,12 @@ class PostServiceTest {
 
     @MockBean
     private PostRepository postRepository;
+
+    @MockBean
+    private UserUtil userUtil;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
     public void checkIfFetchesPosts(){
@@ -39,6 +49,41 @@ class PostServiceTest {
         assertEquals(user.getUsername(), posts.get(1).getPostCreatorName());
         assertEquals(post1.getPostText(), posts.get(0).getPostText());
         assertEquals(post2.getPostText(), posts.get(1).getPostText());
+    }
+
+    @Test
+    public void checkIfAddPost(){
+        PostDTO postDTO = new PostDTO();
+        postDTO.setPostText("test post");
+        User user = new User();
+        user.setPostsCreated(new ArrayList<>());
+
+        given(userUtil.getUser()).willReturn(user);
+
+        postService.addPost(postDTO);
+
+        verify(postRepository, times(1)).save(any());
+        verify(userRepository, times(1)).save(any());
+        assertEquals(postDTO.getPostText(), user.getPostsCreated().get(0).getPostText());
+        assertEquals(user, user.getPostsCreated().get(0).getPostCreator());
+    }
+
+    @Test
+    public void checkIfThrowsExceptionWhenPostTextIsInvalid(){
+        PostDTO postDTO = new PostDTO();
+        postDTO.setPostText("");
+
+        assertThrows(InvalidPostArgumentException.class, () -> postService.addPost(postDTO));
+    }
+
+    @Test
+    public void checkIfThrowsExceptionWhenMoreThanPostTextProvided(){
+        PostDTO postDTO = new PostDTO();
+        postDTO.setPostText("test post");
+        postDTO.setPostCreatorName("test creator");
+        postDTO.setPostDate("2020-09-25");
+
+        assertThrows(InvalidPostArgumentException.class, () -> postService.addPost(postDTO));
     }
 
 }

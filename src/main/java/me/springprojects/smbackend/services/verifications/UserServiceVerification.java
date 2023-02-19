@@ -1,13 +1,10 @@
 package me.springprojects.smbackend.services.verifications;
 
 import lombok.AllArgsConstructor;
-import me.springprojects.smbackend.entities.User;
 import me.springprojects.smbackend.entities.dto.UserDTO;
 import me.springprojects.smbackend.exceptions.InvalidUserArgumentException;
 import me.springprojects.smbackend.repositories.UserRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -16,25 +13,24 @@ public class UserServiceVerification {
     private final UserRepository userRepository;
 
     public void registerUserVerification(UserDTO userDTO){
-        String name = userDTO.getUsername();
-        String email = userDTO.getEmail();
-        String password = userDTO.getPassword();
-        String usernameValidated = validateUsername(name);
-        String emailValidated = validateUserEmail(email);
-        String passwordValidated = validateUserPassword(password);
-        if(usernameValidated!=null) throw new InvalidUserArgumentException(usernameValidated);
-        else if(emailValidated!=null) throw new InvalidUserArgumentException(emailValidated);
-        else if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
+        usernameVerification(userDTO.getUsername());
+        emailVerification(userDTO.getEmail());
+        passwordVerification(userDTO.getPassword());
     }
 
-    public void changeEmailVerification(String email){
+    public void emailVerification(String email){
         String emailValidated = validateUserEmail(email);
         if(emailValidated!=null) throw new InvalidUserArgumentException(emailValidated);
     }
 
-    public void changePasswordVerification(String password){
+    public void passwordVerification(String password){
         String passwordValidated = validateUserPassword(password);
         if(passwordValidated!=null) throw new InvalidUserArgumentException(passwordValidated);
+    }
+
+    public void usernameVerification(String username){
+        String usernameValidated = validateUsername(username);
+        if(usernameValidated!=null) throw new InvalidUserArgumentException(usernameValidated);
     }
 
     private String validateUsername(String name){

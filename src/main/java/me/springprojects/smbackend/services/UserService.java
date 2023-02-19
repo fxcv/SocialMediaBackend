@@ -10,6 +10,7 @@ import me.springprojects.smbackend.services.verifications.UserServiceVerificatio
 import me.springprojects.smbackend.utility.UserUtil;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,9 +42,13 @@ public class UserService {
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
+        user.setExpirationDate(LocalDate.now().plusMonths(12));
+        user.setLocked(false);
+        user.setCredentialsExpired(false);
+        user.setEnabled(true);
         user.setPostsCreated(new ArrayList<>());
         user.setAuthorities(new ArrayList<>());
-        SecurityAuthority sc = securityAuthorityRepository.findAuthorityByName("USER");
+        SecurityAuthority sc = securityAuthorityRepository.findAuthorityByName("ROLE_USER");
         sc.getUsers().add(user);
         user.getAuthorities().add(sc);
         securityAuthorityRepository.save(sc);
@@ -51,14 +56,14 @@ public class UserService {
     }
 
     public void updateUserEmail(String email){
-        userServiceVerification.changeEmailVerification(email);
+        userServiceVerification.emailVerification(email);
         User user = userUtil.getUser();
         user.setEmail(email);
         userRepository.save(user);
     }
 
     public void updateUserPassword(String password){
-        userServiceVerification.changePasswordVerification(password);
+        userServiceVerification.passwordVerification(password);
         User user = userUtil.getUser();
         user.setPassword(password);
         userRepository.save(user);
