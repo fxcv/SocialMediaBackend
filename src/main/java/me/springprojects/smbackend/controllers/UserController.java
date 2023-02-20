@@ -24,6 +24,11 @@ public class UserController {
         return userService.fetchAllUsers();
     }
 
+    @GetMapping(path = "/get")
+    public UserDTO getCurrentUser(){
+        return userService.getCurrentUser();
+    }
+
     @PutMapping(path = "/update/email")
     public void updateUserEmail(@RequestParam(name = "email") String email){
         userService.updateUserEmail(email);

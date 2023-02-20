@@ -19,6 +19,11 @@ public class PostController {
         postService.addPost(postDTO);
     }
 
+    @GetMapping(path = "/get")
+    public List<PostDTO> getCurrentUserPosts(){
+        return postService.getCurrentUserPosts();
+    }
+
     @GetMapping(path = "/all")
     public List<PostDTO> fetchAllPosts(){
         return postService.fetchAllPosts();

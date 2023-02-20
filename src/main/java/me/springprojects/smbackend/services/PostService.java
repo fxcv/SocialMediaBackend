@@ -35,6 +35,19 @@ public class PostService {
         userRepository.save(user);
     }
 
+    public List<PostDTO> getCurrentUserPosts(){
+        User user = userUtil.getUser();
+        return postRepository.getUserPosts(user).stream()
+                                                .map(post -> {
+                                                    PostDTO postDTO = new PostDTO();
+                                                    postDTO.setPostCreatorName(post.getPostCreator().getUsername());
+                                                    postDTO.setPostDate(post.getPostDate().toString());
+                                                    postDTO.setPostText(post.getPostText());
+                                                    return postDTO;
+                                                })
+                                                .collect(Collectors.toList());
+    }
+
     public List<PostDTO> fetchAllPosts(){
         return postRepository.findAll().stream()
                                        .map(post -> {

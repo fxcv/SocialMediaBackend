@@ -69,6 +69,26 @@ class PostServiceTest {
     }
 
     @Test
+    public void checkIfGetsCurrentUserPost(){
+        Post post = new Post();
+        User user = new User();
+        user.setUsername("testUser");
+        post.setPostCreator(user);
+        post.setPostDate(LocalDateTime.now());
+        post.setPostText("test text");
+        user.setPostsCreated(new ArrayList<>());
+        user.getPostsCreated().add(post);
+        given(userUtil.getUser()).willReturn(user);
+        given(postRepository.getUserPosts(user)).willReturn(List.of(post));
+
+        List<PostDTO> userPosts = postService.getCurrentUserPosts();
+
+        assertEquals(user.getUsername(), userPosts.get(0).getPostCreatorName());
+        assertEquals(post.getPostDate().toString(), userPosts.get(0).getPostDate());
+        assertEquals(post.getPostText(), userPosts.get(0).getPostText());
+    }
+
+    @Test
     public void checkIfThrowsExceptionWhenPostTextIsInvalid(){
         PostDTO postDTO = new PostDTO();
         postDTO.setPostText("");

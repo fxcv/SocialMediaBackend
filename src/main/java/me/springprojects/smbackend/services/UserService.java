@@ -55,6 +55,15 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public UserDTO getCurrentUser(){
+        User user = userUtil.getUser();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());
+        return userDTO;
+    }
+
     public void updateUserEmail(String email){
         userServiceVerification.emailVerification(email);
         User user = userUtil.getUser();

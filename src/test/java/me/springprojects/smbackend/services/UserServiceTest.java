@@ -103,6 +103,21 @@ class UserServiceTest {
     }
 
     @Test
+    public void checkIfGetsCurrentUser(){
+        User user = new User();
+        user.setUsername("Alice");
+        user.setEmail("name@gmail.com");
+        user.setPassword("testPassword@1");
+        given(userUtil.getUser()).willReturn(user);
+
+        UserDTO userDTO = userService.getCurrentUser();
+
+        assertEquals(user.getUsername(), userDTO.getUsername());
+        assertEquals(user.getEmail(), userDTO.getEmail());
+        assertEquals(user.getPassword(), userDTO.getPassword());
+    }
+
+    @Test
     public void checkIfFetchesUsers(){
         User user1 = new User();
         User user2 = new User();
